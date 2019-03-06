@@ -1,0 +1,25 @@
+{
+  "@context": "http://clowder.ncsa.illinois.edu/contexts/extractors.jsonld",
+  "name": "ncsa.tensorflow.mnist",
+  "version": "0.1",
+  "description": "Runs simple mnist tensorflow example model on images.",
+  "author": "Luigi Marini <lmarini@illinois.edu>",
+  "contributors": [],
+  "contexts": [
+    {
+      "label": "http://clowder.ncsa.illinois.edu/metadata/ncsa.tensorflow.mnist#label"
+    }
+  ],
+  "repository": {
+    "repType": "git",
+    "repUrl": "https://opensource.ncsa.illinois.edu/bitbucket/scm/cats/clowder-tensorflow.git"
+  },
+  "process": {
+    "file": [
+      "image/*"
+    ]
+  },
+  "external_services": [],
+  "dependencies": [],
+  "bibtex": []
+}

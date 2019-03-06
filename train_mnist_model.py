@@ -10,7 +10,7 @@ import utils
 import tensorflow as tf
 from tensorflow import keras
 
-import load_data
+tf.__version__
 
 
 # Simple model creation from Tensorflow documentation
@@ -70,9 +70,13 @@ if __name__ == '__main__':
     parser.add_argument("--datasetid", help="Clowder dataset id")
     args = parser.parse_args()
 
-    training_label = "Training Label" # 'basic_caltech101_score'
-    (file_paths, labels) = load_data.download_data(args.clowderurl, args.clowderkey, args.datasetid, training_label)
-    dataset = load_data.load_data(file_paths, labels)
+    (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
+
+    train_labels = train_labels[:1000]
+    test_labels = test_labels[:1000]
+
+    train_images = train_images[:1000].reshape(-1, 28 * 28)# / 255.0
+    test_images = test_images[:1000].reshape(-1, 28 * 28)# / 255.0
 
     # Create a basic model instance
     model = create_model()
@@ -83,7 +87,7 @@ if __name__ == '__main__':
                   loss=tf.keras.losses.sparse_categorical_crossentropy,
                   metrics=['accuracy'])
 
-    model.fit(dataset, epochs=1, steps_per_epoch=2)
+    model.fit(train_images, train_labels, epochs=5)
 
     # Save entire model to a HDF5 file
     saved_model_location = 'temp/tensorflow_model_mnist.h5'
@@ -94,16 +98,8 @@ if __name__ == '__main__':
     # Recreate the exact same model, including weights and optimizer.
     new_model = keras.models.load_model(saved_model_location)
     new_model.summary()
-
-    image_string = tf.read_file("/Users/lmarini/data/clowder-demo-files/IMG_0997.jpg")
-    image_decoded = tf.image.decode_jpeg(image_string)
-    image_resized = tf.image.resize_images(image_decoded, [28, 28])
-
-    print(image_resized.shape)
-
-    predictions = model.predict([image_resized], steps=2)
-
-    print(predictions)
+    loss, acc = new_model.evaluate(test_images, test_labels)
+    print("Restored model, accuracy: {:5.2f}%".format(100 * acc))
 
     # delete model on disk
     # utils.delete_temp_files([saved_model_location])

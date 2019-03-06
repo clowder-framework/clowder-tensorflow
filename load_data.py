@@ -27,40 +27,49 @@ def download_file(url, filename):
         with open(file_path, 'wb') as fd:
             for chunk in r.iter_content(2000):
                 fd.write(chunk)
-    return file_path
+        return file_path
+    else:
+        return "Error downloading file"
 
 
-def download_data(clowderurl, clowderkey, datasetid):
+def download_data(clowderurl, clowderkey, datasetid, traininglabel):
+    # Only files with a specific metdata field will be downloaded
     r = requests.get("{}/api/datasets/{}/files?key={}".format(clowderurl, datasetid, clowderkey))
     files = r.json()
-    print(files)
+
     file_paths = []
     labels = []
     for f in files:
         if f.get('contentType').startswith('image'):
             # dowload metadata
             metadata_url = "{}/api/files/{}/metadata.jsonld?key={}".format(clowderurl, f['id'], clowderkey)
-            print(metadata_url)
+            print("Analyzing file " + f.get('filename') + " " + metadata_url)
             r = requests.get(metadata_url)
             try:
                 metadata = r.json()
-                for m in metadata:
-                    score = m.get('content').get('basic_caltech101_score')
-                    if score is not None:
-                        print("score: " + score)
-                        labels.append(int(float(score) * 100))
-                        # Download file to temp directory.
-                        # The file metadata includes path on disk. If file system is shared this could be replaced by
-                        # reading the file directly from the file system.
-                        download_url = "{}/api/files/{}/blob?key={}".format(clowderurl, f['id'], clowderkey)
-                        print("download_url " + download_url)
-                        path = download_file(download_url, f['filename'])
-                        file_paths.append(path)
+                if len(metadata) == 0:
+                    print("Empty metadata")
+                else:
+                    print(f)
+                    for m in metadata:
+                        score = m.get('content').get(traininglabel)
+                        if score is not None:
+                            print("score: " + score)
+                            labels.append(int(float(score)))
+                            # Download file to temp directory.
+                            # The file metadata includes path on disk. If file system is shared this could be replaced by
+                            # reading the file directly from the file system.
+                            download_url = "{}/api/files/{}/blob?key={}".format(clowderurl, f['id'], clowderkey)
+                            print("download_url " + download_url)
+                            path = download_file(download_url, f['filename'])
+                            file_paths.append(path)
+                        else:
+                            print("File does not have required metadata")
             except ValueError:
-                print(r)
+                print("Error " + r)
 
-    print(file_paths)
-    print(labels)
+    print('Found matching files' + str(file_paths))
+    print('Labels' + str(labels))
     return (file_paths, labels)
 
 
@@ -81,19 +90,21 @@ def load_data(file_paths, labels):
     dataset = dataset.map(_parse_function)
 
     # delete files downloaded from Clowder
-    delete_temp_files(file_paths)
+    #delete_temp_files(file_paths)
 
-    print(dataset.output_types)
-    print(dataset.output_shapes)
+    print('Output types: ' + str(dataset.output_types))
+    print('Output shapes: ' + str(dataset.output_shapes))
     return dataset
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("clowderurl", help="Clowder URL")
-    parser.add_argument("clowderkey", help="Clower API key")
-    parser.add_argument("datasetid", help="Clowder dataset id")
+    parser.add_argument("--clowderurl", help="Clowder URL")
+    parser.add_argument("--clowderkey", help="Clower API key")
+    parser.add_argument("--datasetid", help="Clowder dataset id")
     args = parser.parse_args()
-    (file_paths, labels) = download_data(args.clowderurl, args.clowderkey, args.datasetid)
+    training_label = "Training Label" # 'basic_caltech101_score'
+    (file_paths, labels) = download_data(args.clowderurl, args.clowderkey, args.datasetid, training_label)
     dataset = load_data(file_paths, labels)
+    print(dataset)
 
