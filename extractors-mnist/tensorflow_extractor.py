@@ -6,7 +6,7 @@ def extract(input_file):
     classes = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
     # Recreate the exact same model, including weights and optimizer.
-    saved_model_location = "temp/tensorflow_model_mnist.h5"
+    saved_model_location = "tensorflow_model_mnist.h5"
     model = keras.models.load_model(saved_model_location)
     model.summary()
 
