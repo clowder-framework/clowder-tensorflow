@@ -1,8 +1,17 @@
-FROM clowder/extractors-simple-extractor-python3:onbuild
+FROM tensorflow/tensorflow
 
-ENV EXTRACTION_MODULE="tensorflow_extractor"
-ENV EXTRACTION_FUNC="extract"
+RUN pip install pyclowder
+
+COPY requirements.txt /home/requirements.txt
+
+RUN pip install -r /home/requirements.txt
 
 #RUN pip install --upgrade pip
 
-COPY tensorflow_model_mnist.h5 tensorflow_model_mnist.h5
+COPY tensorflow_model_mnist.h5 /home/tensorflow_model_mnist.h5
+
+COPY * /home/
+
+CMD ["python", "/home/new_tensorflow_extractor.py"]
+
+

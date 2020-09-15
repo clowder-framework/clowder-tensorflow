@@ -1,6 +1,6 @@
 {
   "@context": "http://clowder.ncsa.illinois.edu/contexts/extractors.jsonld",
-  "name": "ncsa.tensorflow.mnist",
+  "name": "ncsa.tensorflow.mnist.new",
   "version": "0.1",
   "description": "Runs simple mnist tensorflow example model on images.",
   "author": "Luigi Marini <lmarini@illinois.edu>",
