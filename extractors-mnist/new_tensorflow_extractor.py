@@ -3,6 +3,7 @@
 """Example extractor based on the clowder code."""
 
 import logging
+import os
 from tensorflow import keras
 import subprocess
 
@@ -38,7 +39,11 @@ class TensorFlowExtractor(Extractor):
                    'Ankle boot']
 
         # Recreate the exact same model, including weights and optimizer.
-        saved_model_location = "tensorflow_model_mnist.h5"
+        logger.debug("where am I?")
+        logger.debug(os.getcwd())
+        logger.debug('what is here?')
+        logger.debug(os.listdir(os.getcwd()))
+        saved_model_location = "/home/tensorflow_model_mnist.h5"
         model = keras.models.load_model(saved_model_location)
         model.summary()
 
