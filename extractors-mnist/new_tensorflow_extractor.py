@@ -76,6 +76,7 @@ class TensorFlowExtractor(Extractor):
 
 
 if __name__ == "__main__":
+    print('starting the extrarctor')
     extractor = TensorFlowExtractor()
 
     extractor.start()

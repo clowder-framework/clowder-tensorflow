@@ -44,7 +44,7 @@ RUN python -m pip install --ignore-installed pyclowder
 
 # The code to run when container is started:
 
-ENTRYPOINT ["conda", "run", "-n", "myenv", "python", "/home/new_tensorflow_extractor.py"]
+ENTRYPOINT ["conda", "run", "-n", "myenv", "python","-u", "/home/new_tensorflow_extractor.py"]
 
 # CMD ["python", "/home/test.py"]
 
