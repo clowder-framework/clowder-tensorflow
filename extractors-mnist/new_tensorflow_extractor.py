@@ -5,6 +5,7 @@
 import logging
 import os
 from tensorflow import keras
+import time
 import subprocess
 
 from pyclowder.extractors import Extractor
@@ -76,4 +77,5 @@ class TensorFlowExtractor(Extractor):
 
 if __name__ == "__main__":
     extractor = TensorFlowExtractor()
+
     extractor.start()
