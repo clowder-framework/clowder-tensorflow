@@ -12,6 +12,8 @@ RUN wget \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
 RUN conda --version
 
+
+RUN conda clean -a
 #RUN pip install --upgrade pip
 
 COPY tensorflow_model_mnist.h5 /home/tensorflow_model_mnist.h5
@@ -26,19 +28,23 @@ COPY extractor_info.json .
 
 COPY extractor_info.json /home/extractor_info.json
 
-COPY environment.yml /home/environment.yml
+COPY Setup/environment.yml /home/Setup/environment.yml
 
-RUN conda env create -f /home/environment.yml
+RUN conda env create -f /home/Setup/environment.yml
 
 COPY test.py .
 
-COPY run.py .
+COPY test.py /home/test.py
+
+COPY run.py /home/run.py
 
 SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"]
 
 # Make sure the environment is activated:
 RUN echo "Make sure tensorflow is installed:"
 RUN python -c "import tensorflow"
+
+RUN conda install numpy
 
 RUN python -m pip install --ignore-installed pyclowder
 

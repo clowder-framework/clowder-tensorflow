@@ -1,8 +1,10 @@
 from tensorflow import keras
+import  time
 
 
 def main():
     print('running main')
+    time.sleep(60*3)
     classes = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag',
                'Ankle boot']
     print('classes are', classes)
