@@ -10,10 +10,10 @@ import subprocess
 
 from pyclowder.extractors import Extractor
 import pyclowder.files
-current_ip = '10.195.156.41'
-os.environ['RABBITMQ_URI'] = 'amqp://guest:guest@'+current_ip+'/%2f'
-os.environ['CLOWDER_URL'] = 'http://'+current_ip+':8000/'
-os.environ['REGISTRATION_ENDPOINTS'] ='http://'+current_ip+':8000/api/extractors?key=53bb5a14-bc2c-4871-874c-2f618972aa4e'
+# current_ip = '10.195.156.41'
+# os.environ['RABBITMQ_URI'] = 'amqp://guest:guest@'+current_ip+'/%2f'
+# os.environ['CLOWDER_URL'] = 'http://'+current_ip+':8000/'
+# os.environ['REGISTRATION_ENDPOINTS'] ='http://'+current_ip+':8000/api/extractors?key=53bb5a14-bc2c-4871-874c-2f618972aa4e'
 
 
 class TensorFlowExtractor(Extractor):
@@ -27,10 +27,10 @@ class TensorFlowExtractor(Extractor):
 
         # parse command line and load default logging configuration
         self.setup()
-        os.environ['RABBITMQ_URI'] = 'amqp://guest:guest@'+current_ip+'/%2f'
-        os.environ['CLOWDER_URL'] = 'http://'+current_ip+':8000'
-        os.environ[
-            'REGISTRATION_ENDPOINTS'] = 'http://'+current_ip+':8000/api/extractors?key=53bb5a14-bc2c-4871-874c-2f618972aa4e'
+        # os.environ['RABBITMQ_URI'] = 'amqp://guest:guest@'+current_ip+'/%2f'
+        # os.environ['CLOWDER_URL'] = 'http://'+current_ip+':8000'
+        # os.environ[
+        #     'REGISTRATION_ENDPOINTS'] = 'http://'+current_ip+':8000/api/extractors?key=53bb5a14-bc2c-4871-874c-2f618972aa4e'
 
         # setup logging for the exctractor
         logging.getLogger('pyclowder').setLevel(logging.DEBUG)
@@ -52,7 +52,7 @@ class TensorFlowExtractor(Extractor):
         logger.debug(os.getcwd())
         logger.debug('what is here?')
         logger.debug(os.listdir(os.getcwd()))
-        saved_model_location = "tensorflow_model_mnist.h5"
+        saved_model_location = "/home/tensorflow_model_mnist.h5"
         model = keras.models.load_model(saved_model_location)
         model.summary()
 
