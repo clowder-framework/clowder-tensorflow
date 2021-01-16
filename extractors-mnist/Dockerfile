@@ -12,7 +12,6 @@ RUN wget \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
 RUN conda --version
 
-ARG conda_env=mnist
 
 RUN conda clean -a
 #RUN pip install --upgrade pip
@@ -39,18 +38,22 @@ COPY test.py /home/test.py
 
 COPY run.py /home/run.py
 
-ENV PATH /opt/conda/envs/$conda_env/bin:$PATH
-ENV CONDA_DEFAULT_ENV $conda_env
+SHELL ["conda", "run", "-n", "mnist", "/bin/bash", "-c"]
 
-ENV PATH /opt/conda/envs/mro_env/bin:$PATH
-RUN /bin/bash -c "source activate mnist"
+# Make sure the environment is activated:
+RUN echo "Make sure tensorflow is installed:"
+RUN python -c "import tensorflow"
+
+RUN conda install numpy
 
 RUN python -m pip install --ignore-installed pyclowder
 
 # The code to run when container is started:
 
-# CMD ["conda", "run", "-n", "myenv", "python","-u", "/home/new_tensorflow_extractor.py"]
+#CMD ["conda", "run", "-n", "myenv", "python","-u", "/home/new_tensorflow_extractor.py"]
 
-CMD ["python", "/home/run.py"]
+CMD ["conda", "run", "--no-capture-output", "-n", "mnist", "python","-u", "/home/new_tensorflow_extractor.py"]
 
+#CMD ["conda", "/home/test.py"]
+#
 
