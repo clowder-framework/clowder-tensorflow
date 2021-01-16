@@ -1,4 +1,4 @@
-name: myenv
+name: mnist-setup
 channels:
   - conda-forge
 dependencies:

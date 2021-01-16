@@ -1,8 +1,7 @@
-name: myenv
+name: mnist
 channels:
   - conda-forge
 dependencies:
-  - python=3.6
   - absl-py==0.5.0
   - astor==0.7.1
   - certifi==2018.11.29
