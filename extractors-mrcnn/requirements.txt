@@ -1,0 +1,12 @@
+tensorflow==1.13.1
+numpy
+scipy
+Pillow
+cython
+matplotlib
+scikit-image
+keras
+opencv-python
+h5py
+imgaug
+IPython[all]
