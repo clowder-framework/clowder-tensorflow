@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 from matplotlib import patches,  lines
 from matplotlib.patches import Polygon
 import IPython.display
+from PIL import Image
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../")
@@ -165,6 +166,7 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     ax.imshow(masked_image.astype(np.uint8))
     if auto_show:
         plt.show()
+    return Image.fromarray(masked_image.astype(np.uint8), 'RGB')
 
 
 def display_differences(image,

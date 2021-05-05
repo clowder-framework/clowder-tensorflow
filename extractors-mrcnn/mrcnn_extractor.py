@@ -7,22 +7,28 @@ import skimage.io
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Root directory of the project
-#ROOT_DIR = os.path.abspath(".")
-
-# Import Mask RCNN
-#sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn import utils
 import mrcnn.model as modellib
 from mrcnn import visualize
-# Import COCO config
-#sys.path.append(os.path.join(ROOT_DIR, "coco/"))  # To find local version
-from coco import coco
+from pycocotools import coco
+from mrcnn.config import Config
 
-# Directory to save logs and trained model
-#MODEL_DIR = os.path.join(ROOT_DIR, "logs")
+class CocoConfig(Config):
+    """Configuration for training on MS COCO.
+    Derives from the base Config class and overrides values specific
+    to the COCO dataset.
+    """
+    # Give the configuration a recognizable name
+    NAME = "coco"
 
-class InferenceConfig(coco.CocoConfig):
+    # We use a GPU with 12GB memory, which can fit two images.
+    # Adjust down if you use a smaller GPU.
+    IMAGES_PER_GPU = 2
+
+    # Number of classes (including background)
+    NUM_CLASSES = 81
+
+class InferenceConfig(CocoConfig):
     # Set batch size to 1 since we'll be running inference on
     # one image at a time. Batch size = GPU_COUNT * IMAGES_PER_GPU
     GPU_COUNT = 1
@@ -39,7 +45,6 @@ def mrcnn(input_file_path):
     config = InferenceConfig()
 
     # Directory to save logs and trained model
-    #MODEL_DIR = os.path.join(ROOT_DIR, "logs")
     MODEL_DIR = 'logs'
 
     # Local path to trained weights file
@@ -78,21 +83,17 @@ def mrcnn(input_file_path):
 
     # Visualize results
     r = results[0]
-    visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
+    mrcnn_img = visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
                                 class_names, r['scores'], input_file_path)
+    file_name = "masked_image.jpg"
+    mrcnn_img.save(file_name)
 
-    # Create metadata dictionary
-    #metadata = {
-    #    'masks': r['masks']
-    #}
+    return r
 
-    # Store metadata in result dictionary
-    result = {
-        'metadata': {},
-        'preview': [
-            {'file': 'masked_image.jpg', 'metadata': {}, 'mimetype': 'image/jpeg'}
-        ]
-    }
 
-    # Return the result dictionary
-    return result
+if __name__ == "__main__":
+    print('Run the mrcnn model')
+    result = mrcnn('./test.jpg')
+
+    print(result)
+

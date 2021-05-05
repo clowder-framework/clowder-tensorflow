@@ -13,4 +13,3 @@ Build and run using docker:
 
 ```docker build -t clowder/ncsa.tensorflow.mrcnn .```
 
-```docker run --rm -ti --name=tensorflow -e 'RABBITMQ_URI=amqp://guest:guest@141.142.60.207/%2f' -e 'REGISTRATION_ENDPOINTS=http://141.142.60.207:9000/api/extractors?key=r1ek3rs' clowder/ncsa.tensorflow.mnist```

@@ -1,22 +1,19 @@
 {
   "@context": "http://clowder.ncsa.illinois.edu/contexts/extractors.jsonld",
-  "name": "ncsa.ml.mrcnn",
+  "name": "ncsa.tensorflow.mrcnn",
   "version": "0.1",
-  "description": "Mask_RCNN simple extractor. Generate bounding boxes and segmentation masks for each instance of an object in the image was uploaded.",
+  "description": "Generate bounding boxes and segmentation masks for each instance of an object in the image was uploaded.",
   "author": "Dukyun Nam <dynam@illinois.edu>",
   "contributors": [],
-  "contexts": [],
-  "repository": [
-    { 
-      "repType": "git",
-      "repUrl": "https://opensource.ncsa.illinois.edu/stash/scm/cats/pyclowder.git"
-    },
+  "contexts": [
     {
-      "repType": "docker",
-      "repUrl": "clowder/extractors-mrcnn-simple-extractor"
+      "label": "http://clowder.ncsa.illinois.edu/metadata/ncsa.tensorflow.mrcnn#label"
     }
   ],
-
+  "repository": [{
+    "repType": "git",
+    "repUrl": "https://opensource.ncsa.illinois.edu/bitbucket/scm/cats/clowder-tensorflow.git"
+  }],
   "process": {
     "file": [
       "image/*"

@@ -1,0 +1,18 @@
+name: mrcnn
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - numpy==1.16.4
+  - tensorflow==1.13.1
+  - scipy
+  - Pillow
+  - cython
+  - matplotlib
+  - scikit-image==0.14.1
+  - keras
+  - opencv==3.4.9
+  - h5py==2.10.0
+  - imgaug
+  - IPython
+  - pycocotools==2.0.1
