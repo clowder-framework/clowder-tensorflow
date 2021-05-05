@@ -1,4 +1,4 @@
-# Clowder Tensorflow (Mask RCNN COCO) Example
+# Clowder Tensorflow (Mask RCNN) Example
 
 Examples of how to use Clowder and Tensorflow together:
 
