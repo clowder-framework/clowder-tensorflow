@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from mrcnn import utils
 import mrcnn.model as modellib
 from mrcnn import visualize
-from pycocotools import coco
+#from pycocotools import coco
 from mrcnn.config import Config
 
 class CocoConfig(Config):

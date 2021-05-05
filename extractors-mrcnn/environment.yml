@@ -15,4 +15,3 @@ dependencies:
   - h5py==2.10.0
   - imgaug
   - IPython
-  - pycocotools==2.0.1
