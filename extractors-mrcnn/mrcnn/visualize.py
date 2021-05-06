@@ -119,7 +119,7 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     ax.set_ylim(height + 10, -10)
     ax.set_xlim(-10, width + 10)
     ax.axis('off')
-    ax.set_title(title)
+    #ax.set_title(title)
 
     masked_image = image.astype(np.uint32).copy()
     for i in range(N):
@@ -166,7 +166,8 @@ def display_instances(image, boxes, masks, class_ids, class_names,
     ax.imshow(masked_image.astype(np.uint8))
     if auto_show:
         plt.show()
-    return Image.fromarray(masked_image.astype(np.uint8), 'RGB')
+    #return Image.fromarray(masked_image.astype(np.uint8), 'RGB')
+    return plt
 
 
 def display_differences(image,

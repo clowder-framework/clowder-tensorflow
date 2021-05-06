@@ -1,4 +1,15 @@
+#!/usr/bin/env python
+
+import logging
 import os
+import re
+import subprocess
+import tempfile
+
+from pyclowder.extractors import Extractor
+import pyclowder.files
+import pyclowder.utils
+
 import sys
 import random
 import math
@@ -6,6 +17,7 @@ import numpy as np
 import skimage.io
 import matplotlib
 import matplotlib.pyplot as plt
+from PIL import Image
 
 from mrcnn import utils
 import mrcnn.model as modellib
@@ -34,7 +46,7 @@ class InferenceConfig(CocoConfig):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
 
-def mrcnn(input_file_path):
+def mrcnn(inputfile, outputfile):
     """
     This function generates bounding boxes and segmentation masks for each instance of an object in the image was uploaded.
 
@@ -76,24 +88,67 @@ def mrcnn(input_file_path):
                    'teddy bear', 'hair drier', 'toothbrush']
 
     # Load a image
-    image = skimage.io.imread(input_file_path)
+    image = skimage.io.imread(inputfile)
 
     # Run detection
     results = model.detect([image], verbose=1)
 
     # Visualize results
     r = results[0]
-    mrcnn_img = visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
-                                class_names, r['scores'], input_file_path)
-    file_name = "masked_image.jpg"
-    mrcnn_img.save(file_name)
+    plt = visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
+                                class_names, r['scores'], inputfile)
+    plt.savefig(outputfile, bbox_inches='tight', pad_inches=0.0)
 
-    return r
+class MrcnnExtractor(Extractor):
+    def __init__(self):
+        Extractor.__init__(self)
 
+        # parse command line and load default logging configuration
+        self.setup()
+
+        # setup logging for the exctractor
+        logging.getLogger('pyclowder').setLevel(logging.DEBUG)
+        logging.getLogger('__main__').setLevel(logging.DEBUG)
+
+
+    def process_message(self, connector, host, secret_key, resource, parameters):
+        # Process the file and upload the results
+
+        inputfile = resource["local_paths"][0]
+        file_id = resource['id']
+        image_type = 'png'
+
+        self.execute_command(connector, host, secret_key, inputfile, file_id, resource, image_type)
+
+    @staticmethod
+    def execute_command(connector, host, key, inputfile, fileid, resource, ext):
+        logger = logging.getLogger(__name__)
+
+        (fd, tmpfile) = tempfile.mkstemp(suffix='.' + ext)
+        try:
+            # close tempfile
+            os.close(fd)
+
+            mrcnn(inputfile, tmpfile)
+
+            if os.path.getsize(tmpfile) != 0:
+                # upload result
+                pyclowder.files.upload_preview(connector, host, key, fileid, tmpfile, None)
+                connector.status_update(pyclowder.utils.StatusMessage.processing, resource,
+                                            "Uploaded preview of type %s" % ext)
+            else:
+                logger.warning("Extraction resulted in 0 byte file, nothing uploaded.")
+
+        except subprocess.CalledProcessError as e:
+            logger.error(binary + " : " + str(e.output))
+            raise
+        finally:
+            try:
+                os.remove(tmpfile)
+            except OSError:
+                pass
 
 if __name__ == "__main__":
-    print('Run the mrcnn model')
-    result = mrcnn('./test.jpg')
-
-    print(result)
+    extractor = MrcnnExtractor()
+    extractor.start()
 

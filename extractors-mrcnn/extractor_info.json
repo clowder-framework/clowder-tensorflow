@@ -5,21 +5,28 @@
   "description": "Generate bounding boxes and segmentation masks for each instance of an object in the image was uploaded.",
   "author": "Dukyun Nam <dynam@illinois.edu>",
   "contributors": [],
-  "contexts": [
+  "contexts": [],
+  "repository": [
     {
-      "label": "http://clowder.ncsa.illinois.edu/metadata/ncsa.tensorflow.mrcnn#label"
+      "repType": "git",
+      "repUrl": "https://opensource.ncsa.illinois.edu/bitbucket/scm/cats/clowder-tensorflow.git"
+    },
+    {
+      "repType": "docker",
+      "repUrl": "clowder/ncsa.tensorflow.mrcnn"
     }
   ],
-  "repository": [{
-    "repType": "git",
-    "repUrl": "https://opensource.ncsa.illinois.edu/bitbucket/scm/cats/clowder-tensorflow.git"
-  }],
+  "external_services": [],
   "process": {
     "file": [
       "image/*"
     ]
   },
-  "external_services": [],
   "dependencies": [],
-  "bibtex": []
+  "bibtex": [
+    ""
+  ],
+  "labels": [
+    "Type/Image"
+  ]
 }

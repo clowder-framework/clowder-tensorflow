@@ -13,9 +13,15 @@ SHELL ["conda", "run", "-n", "mrcnn", "/bin/bash", "-c"]
 RUN echo "Make sure tensorflow is installed:"
 RUN python -c "import tensorflow"
 
+# Install pyclowder
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+
+# Copy Mask RCNN code
+COPY mrcnn/ mrcnn
+
 # The code to run when container is started:
 COPY mask_rcnn_coco.h5 .
-COPY mrcnn/ mrcnn
-COPY mrcnn_extractor.py .
-COPY test.jpg .
+COPY mrcnn_extractor.py extractor_info.json policy.xml ./
+
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "mrcnn", "python", "mrcnn_extractor.py"]
