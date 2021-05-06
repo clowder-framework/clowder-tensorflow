@@ -13,3 +13,4 @@ Build and run using docker:
 
 ```docker build -t clowder/ncsa.tensorflow.mrcnn .```
 
+```docker run -ti --rm --network clowder_clowder -e RABBITMQ_URI=amqp://guest:guest@rabbitmq/%2F clowder/ncsa.tensorflow.mrcnn```
